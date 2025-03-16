@@ -21,9 +21,11 @@ bool edit_distance_within(const string& str1, const string& str2, int d) {
                 ++i; 
             }else if (len1 < len2) {
                 ++j;
+
             }else { 
                 ++i; 
                 ++j; 
+
             }
         } else {
             ++i; 
@@ -34,39 +36,42 @@ bool edit_distance_within(const string& str1, const string& str2, int d) {
 }
 bool is_adjacent(const string & word1, const string & word2) {
     return edit_distance_within(word1, word2, 1);
+
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string & end_word, const set<string>& word_list) {
     if (begin_word == end_word) return {}; 
 
-    queue<vector<string>> ladder_queue;
-    set<string> visited;
-    ladder_queue.push({begin_word});
-    visited.insert(begin_word);
+    queue<vector<string>> ladderQ;
 
-    while (!ladder_queue.empty()) {
-        vector<string> ladder = ladder_queue.front();
-        ladder_queue.pop();
+    set<string> visited;
+    ladderQ.push({begin_word});
+    visited.insert(begin_word);
+    while (!ladderQ.empty()) {
+        vector<string> ladder = ladderQ.front();
+        ladderQ.pop();
         string last_word = ladder.back();
 
         for (const string& word : word_list) {
             if (is_adjacent(last_word, word) && !visited.count(word)) {
                 vector<string> new_ladder = ladder;
                 new_ladder.push_back(word);
+
                 visited.insert(word);
                 
                 if (word == end_word) return new_ladder;
-                ladder_queue.push(new_ladder);
+                ladderQ.push(new_ladder);
             }
         }
     }
     return {};  
 }
 
-void load_words(set<string>& word_list, const string& file_name) {
+void load_words(set<string>& word_list, const string & file_name) {
     ifstream file(file_name);
+
     if (!file) {
-        cerr << "Error opening file: " << file_name << endl;
+        cerr << "Error opening file: " <<file_name<<endl;
         return;
     }
     string word;
@@ -76,9 +81,10 @@ void load_words(set<string>& word_list, const string& file_name) {
     file.close();
 }
 
-void print_word_ladder(const vector<string>& ladder) {
+void print_word_ladder(const vector<string> & ladder) {
     if (ladder.empty()) {
         cout << "No word ladder found." << endl;
+        
         return;
     }
     cout << "Word ladder found: ";
